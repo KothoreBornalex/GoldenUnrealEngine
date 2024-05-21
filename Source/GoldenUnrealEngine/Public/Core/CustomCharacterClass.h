@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "CustomCharacterClass.generated.h"
 
+class UAC_EntitiesComponent;
 class UInputComponent;
 class USkeletalMeshComponent;
 class UCameraComponent;
@@ -26,6 +27,10 @@ class GOLDENUNREALENGINE_API ACustomCharacterClass : public ACharacter
 	/** First person camera */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Entities, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UAC_EntitiesComponent> EntitiesComponent;
+
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
