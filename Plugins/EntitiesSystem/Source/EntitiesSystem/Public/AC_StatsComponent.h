@@ -48,26 +48,21 @@ private:
 
 
 public:
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Stats")
-	void Server_Reliable_InitializeStats();
-	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Stats")
-	void Client_Reliable_InitializeStats();
 	UFUNCTION(BlueprintCallable, Category = "Stats")
-	void InitializeStats();
+	void InitializeStats(UPDA_StatsClass* NewBaseStats);
 
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void ActualizeStats();
 
 	UFUNCTION(BlueprintCallable, Category = "Stats")
 	void BindedFunction_OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser);
 
 
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Stats")
-	void Server_Reliable_SetStatValue(float Value, EStatsTypes Stat);
-	UFUNCTION(Client, Reliable, BlueprintCallable, Category = "Stats")
-	void Client_Reliable_SetStatValue(float Value, EStatsTypes Stat);
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void SetStatValue(float Value, EStatsTypes Stat);
 
-
-	UFUNCTION(Server, Reliable, BlueprintCallable, Category = "Stats")
-	void Server_Reliable_AddStatValue(float Value, EStatsTypes Stat);
+	UFUNCTION(BlueprintCallable, Category = "Stats")
+	void AddStatValue(float Value, EStatsTypes Stat);
 
 
 

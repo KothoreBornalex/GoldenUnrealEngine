@@ -27,7 +27,6 @@ public:
 
 
 private:
-
 	UFUNCTION()
 	void SetUpProps();
 

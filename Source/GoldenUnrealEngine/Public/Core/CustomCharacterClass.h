@@ -4,8 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "PDA_StatsClass.h"
+
 #include "CustomCharacterClass.generated.h"
 
+class UAC_StatsComponent;
 class UAC_EntitiesComponent;
 class UInputComponent;
 class USkeletalMeshComponent;
@@ -15,10 +18,14 @@ class UInputMappingContext;
 struct FInputActionValue;
 
 
-UCLASS()
+UCLASS(BlueprintType)
 class GOLDENUNREALENGINE_API ACustomCharacterClass : public ACharacter
 {
 	GENERATED_BODY()
+
+
+public:
+	ACustomCharacterClass();
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
 	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
@@ -31,56 +38,18 @@ class GOLDENUNREALENGINE_API ACustomCharacterClass : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Entities, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UAC_EntitiesComponent> EntitiesComponent;
 
-
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext;
-
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* JumpAction;
-
-	/** Move Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* MoveAction;
-
-public:
-	ACustomCharacterClass();
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Entities, meta = (AllowPrivateAccess = "true"))
+	TObjectPtr<UAC_StatsComponent> StatsComponent;
 
 protected:
 	virtual void BeginPlay();
 
-public:
+	virtual void PossessedBy(AController* NewController) override;
 
-	/** Look Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	class UInputAction* LookAction;
 
-	/** Bool for AnimBP to switch to another animation set */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Weapon)
-	bool bHasRifle;
-
-	/** Setter to set the bool */
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	void SetHasRifle(bool bNewHasRifle);
-
-	/** Getter for the bool */
-	UFUNCTION(BlueprintCallable, Category = Weapon)
-	bool GetHasRifle();
-
-protected:
-	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
-	void Look(const FInputActionValue& Value);
-
-protected:
-	// APawn interface
-	virtual void SetupPlayerInputComponent(UInputComponent* InputComponent) override;
-	// End of APawn interface
 
 public:
+
 	/** Returns Mesh1P subobject **/
 	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
 	/** Returns FirstPersonCameraComponent subobject **/

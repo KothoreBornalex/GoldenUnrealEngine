@@ -37,9 +37,7 @@ void APropsActor::SetUpProps()
 
 		if(PropsData->Stats)
 		{
-			StatsComponent->BaseStats = PropsData->Stats;
-
-			StatsComponent->InitializeStats();
+			StatsComponent->InitializeStats(PropsData->Stats);
 			
 
 		}else

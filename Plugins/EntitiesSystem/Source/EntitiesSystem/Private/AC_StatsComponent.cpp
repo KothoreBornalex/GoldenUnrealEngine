@@ -26,53 +26,34 @@ void UAC_StatsComponent::BeginPlay()
 	
 }
 
-void UAC_StatsComponent::Server_Reliable_InitializeStats_Implementation()
+
+void UAC_StatsComponent::InitializeStats(UPDA_StatsClass* NewBaseStats)
 {
-	if(BaseStats)
-	{
-		Stats.Append(BaseStats->Stats);
+	BaseStats = NewBaseStats;
 
-		//Client_Reliable_InitializeStats();
-
-	}else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Base Stats in Server Stats Component"));
-	}
-	
-}
-
-void UAC_StatsComponent::Client_Reliable_InitializeStats_Implementation()
-{
-	if (BaseStats)
-	{
-		Stats.Append(BaseStats->Stats);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("No Base Stats in Client Stats Component"));
-	}
-}
-
-void UAC_StatsComponent::InitializeStats()
-{
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UAC_StatsComponent::BindedFunction_OnTakeAnyDamage);
 
+	ActualizeStats();
+}
+
+void UAC_StatsComponent::ActualizeStats()
+{
+
 	if (BaseStats)
 	{
 		Stats.Append(BaseStats->Stats);
-
 	}
 	else
 	{
-
+		UE_LOG(LogTemp, Warning, TEXT("No Player Base Stats In Stats Component"));
 	}
 }
-
-
 
 void UAC_StatsComponent::BindedFunction_OnTakeAnyDamage(AActor* DamagedActor, float Damage, const class UDamageType* DamageType, class AController* InstigatedBy, AActor* DamageCauser)
 {
-	Server_Reliable_AddStatValue(-Damage, EStatsTypes::HEALTH);
+	AddStatValue(-Damage, EStatsTypes::HEALTH);
+
+	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), Stats.Find(EStatsTypes::HEALTH)->CurrentValue);
 }
 
 float UAC_StatsComponent::GetStatCurrentValue(EStatsTypes Stat)
@@ -94,27 +75,17 @@ float UAC_StatsComponent::GetStatMaxValue(EStatsTypes Stat)
 
 
 
-void UAC_StatsComponent::Server_Reliable_AddStatValue_Implementation(float Value, EStatsTypes Stat)
+void UAC_StatsComponent::AddStatValue(float Value, EStatsTypes Stat)
 {
 	if (!Stats.Find(Stat)) return;
 
 	Stats.Find(Stat)->CurrentValue = FMath::Clamp(Stats.Find(Stat)->CurrentValue + Value, 0, Stats.Find(Stat)->MaxValue);
-	UE_LOG(LogTemp, Warning, TEXT("Current Health: %f"), Stats.Find(Stat)->CurrentValue);
 
-	Client_Reliable_SetStatValue(Stats.Find(Stat)->CurrentValue, Stat);
-}
-
-void UAC_StatsComponent::Server_Reliable_SetStatValue_Implementation(float Value, EStatsTypes Stat)
-{
-	if (!Stats.Find(Stat)) return;
-
-	Stats.Find(Stat)->CurrentValue = FMath::Clamp(Value, 0, Stats.Find(Stat)->MaxValue);
-
-	Client_Reliable_SetStatValue(Stats.Find(Stat)->CurrentValue, Stat);
+	SetStatValue(Stats.Find(Stat)->CurrentValue, Stat);
 }
 
 
-void UAC_StatsComponent::Client_Reliable_SetStatValue_Implementation(float Value, EStatsTypes Stat)
+void UAC_StatsComponent::SetStatValue(float Value, EStatsTypes Stat)
 {
 	if (!Stats.Find(Stat)) return;
 
