@@ -28,17 +28,17 @@ public:
 	ACustomCharacterClass();
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	UPROPERTY(VisibleDefaultsOnly, Category = Mesh)
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
 	USkeletalMeshComponent* Mesh1P;
 
 	/** First person camera */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FirstPersonCameraComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Entities, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Entities, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UAC_EntitiesComponent> EntitiesComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Entities, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Entities, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UAC_StatsComponent> StatsComponent;
 
 protected:
