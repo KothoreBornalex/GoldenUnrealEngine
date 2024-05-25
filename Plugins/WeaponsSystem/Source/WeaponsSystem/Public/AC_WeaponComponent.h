@@ -38,20 +38,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ShootByTracing();
 
-	UFUNCTION(Server, Reliable)
-	void Server_Reliable_ApplyDamage(AActor* Actor, float Damage);
+	UFUNCTION()
+	void ApplyDamage(AActor* Actor, float Damage);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool IsMagazineFull();
 
-	UFUNCTION(Server, Unreliable, BlueprintCallable)
-	void Server_ShootReplicated();
 
-	UFUNCTION(NetMultiCast, Reliable, BlueprintCallable)
-	void NetMulticast_ShootEffects(); 
 
 	UFUNCTION(BlueprintCallable)
-	void Client_ShootEffects();
+	void ShootEffects();
+
 public:
 	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
 	TObjectPtr<UStaticMeshComponent> WeaponMeshComponent;
