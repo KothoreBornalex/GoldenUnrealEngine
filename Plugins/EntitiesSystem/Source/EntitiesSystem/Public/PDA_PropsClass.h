@@ -11,7 +11,7 @@
 /**
  * 
  */
-UCLASS()
+UCLASS(BlueprintType)
 class ENTITIESSYSTEM_API UPDA_PropsClass : public UPDA_EntityClass
 {
 	GENERATED_BODY()
