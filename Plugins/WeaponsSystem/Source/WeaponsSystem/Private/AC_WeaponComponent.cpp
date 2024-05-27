@@ -71,39 +71,21 @@ void UAC_WeaponComponent::ShootByTracing()
 	{
 		FVector StartPoint = WeaponMeshComponent->GetSocketLocation(WeaponData->MuzzleSocketName);
 
+		TObjectPtr<APlayerCameraManager> CameraManager = Cast<APawn>(GetOwner())->GetLocalViewingPlayerController()->PlayerCameraManager;
+
+		FVector CameraFarEndPoint = CameraManager->GetCameraLocation() + CameraManager->GetCameraRotation().Vector() * WeaponData->FireRange;;
+
+		FVector EndPoint = CameraFarEndPoint - StartPoint;
+		
 
 		FHitResult HitResult = FHitResult();
 		FCollisionQueryParams Params;
 		Params.AddIgnoredActor(GetOwner());
 
 
-		//if (GetWorld()->LineTraceSingleByObjectType(HitResult, StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, FCollisionObjectQueryParams::AllObjects, Params))
-		//{
-		//	DrawDebugLine(GetWorld(), StartPoint, StartPoint + HitResult.ImpactPoint, FColor::Red, false, 10.0f, 0, 1);
+		//if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, ECollisionChannel::ECC_PhysicsBody, Params))
 
-		//	const FDamageEvent& DamageEvent = FDamageEvent::FDamageEvent();
-		//	HitResult.GetActor()->TakeDamage(WeaponData->Damage, DamageEvent, GetOwner()->GetInstigatorController(), GetOwner());
-
-		//	//ADecalActor* Decal = GetWorld()->SpawnActor<ADecalActor>(HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
-		//	//if (Decal)
-		//	//{
-		//	//	UE_LOG(LogTemp, Warning, TEXT("Decal Create with success"));
-		//	//	FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative, true);
-
-		//	//	//Decal->SetActorScale3D(FVector(1, 1, 1));
-		//	//	Decal->SetDecalMaterial(WeaponData->BulletHoleMaterial);
-		//	//	Decal->SetLifeSpan(7.5f);
-		//	//	Decal->GetDecal()->DecalSize = FVector(6.4f, 6.4f, 6.4f);
-		//	//	//Decal->AttachToComponent(HitResult.GetComponent(), AttachmentRules);
-
-		//	//}
-		//}
-		//else
-		//{
-		//	DrawDebugLine(GetWorld(), StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, FColor::Red, false, 10.0f, 0, 1);
-		//}
-
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, ECollisionChannel::ECC_PhysicsBody, Params))
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECollisionChannel::ECC_PhysicsBody, Params))
 		{
 			DrawDebugLine(GetWorld(), StartPoint, HitResult.ImpactPoint, FColor::Red, false, 10.0f, 0, 1);
 			//UE_LOG(LogTemp, Warning, TEXT("Actor Hit Name: %s"), *HitResult.GetActor()->GetDebugName(HitResult.GetActor()));
