@@ -36,26 +36,4 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable")
 	FRotator RotationOffset;
-
-
-
-
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|Camera")
-	float CameraAnimationStrength = 35.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|Camera")
-	float WeaponSwaySmoothness = 13.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|Camera")
-	float WeaponSwayForce = 1.7f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|Camera")
-	float WalkRotationAnimationForce = 1.5f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|Camera")
-	float WalkPositionAnimationForce = 1.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|Camera")
-	float CoyoteTime = 0.35f;
 };

@@ -8,7 +8,6 @@
 
 #include "CustomCharacterClass.generated.h"
 
-class USpringArmComponent;
 class UAC_StatsComponent;
 class UAC_EntitiesComponent;
 class UInputComponent;
@@ -29,16 +28,12 @@ public:
 	ACustomCharacterClass();
 
 	/** Pawn mesh: 1st person view (arms; seen only by self) */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
-	//USkeletalMeshComponent* Mesh1P;
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Mesh)
+	USkeletalMeshComponent* Mesh1P;
 
-
-	///** First person camera */
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//UCameraComponent* FirstPersonCameraComponent;
-
-	//UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
-	//USpringArmComponent* CameraSpringArm;
+	/** First person camera */
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UCameraComponent* FirstPersonCameraComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Entities, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<UAC_EntitiesComponent> EntitiesComponent;
@@ -55,8 +50,8 @@ protected:
 
 public:
 
-	///** Returns Mesh1P subobject **/
-	//USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
-	///** Returns FirstPersonCameraComponent subobject **/
-	//UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
+	/** Returns Mesh1P subobject **/
+	USkeletalMeshComponent* GetMesh1P() const { return Mesh1P; }
+	/** Returns FirstPersonCameraComponent subobject **/
+	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 };
