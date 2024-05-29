@@ -79,9 +79,9 @@ void UAC_StatsComponent::AddStatValue(float Value, EStatsTypes Stat)
 {
 	if (!Stats.Find(Stat)) return;
 
-	Stats.Find(Stat)->CurrentValue = FMath::Clamp(Stats.Find(Stat)->CurrentValue + Value, 0, Stats.Find(Stat)->MaxValue);
+	float NewValue = FMath::Clamp(Stats.Find(Stat)->CurrentValue + Value, 0, Stats.Find(Stat)->MaxValue);
 
-	SetStatValue(Stats.Find(Stat)->CurrentValue, Stat);
+	SetStatValue(NewValue, Stat);
 }
 
 
