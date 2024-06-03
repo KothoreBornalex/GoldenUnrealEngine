@@ -71,47 +71,30 @@ void UAC_WeaponComponent::ShootByTracing()
 	{
 		FVector StartPoint = WeaponMeshComponent->GetSocketLocation(WeaponData->MuzzleSocketName);
 
+		TObjectPtr<APlayerCameraManager> CameraManager = Cast<APawn>(GetOwner())->GetLocalViewingPlayerController()->PlayerCameraManager;
+
+		FVector CameraFarEndPoint = CameraManager->GetCameraLocation() + CameraManager->GetCameraRotation().Vector() * WeaponData->FireRange;;
+
+		FVector EndPoint = CameraFarEndPoint - StartPoint;
+		
 
 		FHitResult HitResult = FHitResult();
 		FCollisionQueryParams Params;
 		Params.AddIgnoredActor(GetOwner());
 
-		//if (GetWorld()->LineTraceSingleByObjectType(HitResult, StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, FCollisionObjectQueryParams::AllObjects, Params))
-		//{
-		//	DrawDebugLine(GetWorld(), StartPoint, StartPoint + HitResult.ImpactPoint, FColor::Red, false, 10.0f, 0, 1);
 
-		//	const FDamageEvent& DamageEvent = FDamageEvent::FDamageEvent();
-		//	HitResult.GetActor()->TakeDamage(WeaponData->Damage, DamageEvent, GetOwner()->GetInstigatorController(), GetOwner());
+		//if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, ECollisionChannel::ECC_PhysicsBody, Params))
 
-		//	//ADecalActor* Decal = GetWorld()->SpawnActor<ADecalActor>(HitResult.ImpactPoint, HitResult.ImpactNormal.Rotation());
-		//	//if (Decal)
-		//	//{
-		//	//	UE_LOG(LogTemp, Warning, TEXT("Decal Create with success"));
-		//	//	FAttachmentTransformRules AttachmentRules = FAttachmentTransformRules(EAttachmentRule::KeepWorld, EAttachmentRule::KeepWorld, EAttachmentRule::KeepRelative, true);
-
-		//	//	//Decal->SetActorScale3D(FVector(1, 1, 1));
-		//	//	Decal->SetDecalMaterial(WeaponData->BulletHoleMaterial);
-		//	//	Decal->SetLifeSpan(7.5f);
-		//	//	Decal->GetDecal()->DecalSize = FVector(6.4f, 6.4f, 6.4f);
-		//	//	//Decal->AttachToComponent(HitResult.GetComponent(), AttachmentRules);
-
-		//	//}
-		//}
-		//else
-		//{
-		//	DrawDebugLine(GetWorld(), StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, FColor::Red, false, 10.0f, 0, 1);
-		//}
-
-		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, ECollisionChannel::ECC_PhysicsBody, Params))
+		if (GetWorld()->LineTraceSingleByChannel(HitResult, StartPoint, EndPoint, ECollisionChannel::ECC_PhysicsBody, Params))
 		{
-			//DrawDebugLine(GetWorld(), StartPoint, HitResult.ImpactPoint, FColor::Red, false, 10.0f, 0, 1);
+			DrawDebugLine(GetWorld(), StartPoint, HitResult.ImpactPoint, FColor::Red, false, 10.0f, 0, 1);
 			//UE_LOG(LogTemp, Warning, TEXT("Actor Hit Name: %s"), *HitResult.GetActor()->GetDebugName(HitResult.GetActor()));
 
 
 			/*const FDamageEvent& DamageEvent = FDamageEvent::FDamageEvent();
 			HitResult.GetActor()->TakeDamage(WeaponData->Damage, DamageEvent, GetOwner()->GetInstigatorController(), GetOwner());*/
 
-			Server_Reliable_ApplyDamage(HitResult.GetActor(), WeaponData->Damage);
+			ApplyDamage(HitResult.GetActor(), WeaponData->Damage);
 
 
 
@@ -131,11 +114,10 @@ void UAC_WeaponComponent::ShootByTracing()
 		}
 		else
 		{
-			//DrawDebugLine(GetWorld(), StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, FColor::Red, false, 10.0f, 0, 1);
+			DrawDebugLine(GetWorld(), StartPoint, StartPoint + WeaponMeshComponent->GetForwardVector() * WeaponData->FireRange, FColor::Red, false, 10.0f, 0, 1);
 		}
 
-		Client_ShootEffects();
-		Server_ShootReplicated();
+		ShootEffects();
 
 		
 
@@ -146,7 +128,7 @@ void UAC_WeaponComponent::ShootByTracing()
 
 }
 
-void UAC_WeaponComponent::Server_Reliable_ApplyDamage_Implementation(AActor* Actor, float Damage)
+void UAC_WeaponComponent::ApplyDamage(AActor* Actor, float Damage)
 {
 	const FDamageEvent& DamageEvent = FDamageEvent::FDamageEvent();
 	Actor->TakeDamage(Damage, DamageEvent, GetOwner()->GetInstigatorController(), GetOwner());
@@ -161,37 +143,23 @@ bool UAC_WeaponComponent::IsMagazineFull()
 	}
 }
 
-void UAC_WeaponComponent::Server_ShootReplicated_Implementation()
-{
-	NetMulticast_ShootEffects();
-}
 
-
-void UAC_WeaponComponent::NetMulticast_ShootEffects_Implementation()
+void UAC_WeaponComponent::ShootEffects()
 {
 	//PrintEvent();
 
-	 // If It's the Owner since the shot FX we're already made in a non replicated call we don't reinstantiate them here.
-	if (GetOwner()->GetInstigatorController()) return;
+	if(WeaponData->MuzzleFlashEffect != nullptr)
+	{
+		MuzzleFlashComponent->ResetSystem();
+		MuzzleFlashComponent->SetAsset(WeaponData->MuzzleFlashEffect);
+		MuzzleFlashComponent->Activate(true);
+	}
+	
 
-	 MuzzleFlashComponent->ResetSystem();
-	 MuzzleFlashComponent->SetAsset(WeaponData->MuzzleFlashEffect);
-	 MuzzleFlashComponent->Activate(true);
-
-	 int32 Index = FMath::RandRange(0, WeaponData->ShootSounds.Num() - 1);
-	 UGameplayStatics::PlaySoundAtLocation(this, WeaponData->ShootSounds[Index], WeaponMeshComponent->GetComponentLocation());
-}
-
-
-void UAC_WeaponComponent::Client_ShootEffects()
-{
-	//PrintEvent();
-
-
-	MuzzleFlashComponent->ResetSystem();
-	MuzzleFlashComponent->SetAsset(WeaponData->MuzzleFlashEffect);
-	MuzzleFlashComponent->Activate(true);
-
-	int32 Index = FMath::RandRange(0, WeaponData->ShootSounds.Num() - 1);
-	UGameplayStatics::PlaySoundAtLocation(this, WeaponData->ShootSounds[Index], WeaponMeshComponent->GetComponentLocation());
+	if(WeaponData->ShootSounds.Num() > 0)
+	{
+		int32 Index = FMath::RandRange(0, WeaponData->ShootSounds.Num() - 1);
+		UGameplayStatics::PlaySoundAtLocation(this, WeaponData->ShootSounds[Index], WeaponMeshComponent->GetComponentLocation());
+	}
+	
 }

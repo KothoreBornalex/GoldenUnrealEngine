@@ -19,10 +19,10 @@ public:
 	// Sets default values for this actor's properties
 	APropsActor();
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UAC_StatsComponent> StatsComponent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<UPDA_PropsClass> PropsData;
 
 
