@@ -53,6 +53,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Stats")
 	float Spread = 2.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Stats")
+	float SlowReloadRate = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Stats")
+	float FastReloadRate = 1.5f;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera|Stats")
+	float CameraRecoilForce = -0.15f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera|Stats")
+	float ArmsRecoilForce = 2.3f;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon|Settings")
 	FName MuzzleSocketName = "Socket_Muzzle";
 };
