@@ -59,6 +59,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Stats")
 	float FastReloadRate = 1.5f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Weapon|Stats")
+	float BulletRadius = 10.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Camera|Stats")
 	float CameraRecoilForce = -0.15f;

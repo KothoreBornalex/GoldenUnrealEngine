@@ -33,7 +33,7 @@ public:
 
 
 	UFUNCTION(BlueprintCallable)
-	void SetUpComponent(UStaticMeshComponent* MeshComponent, UNiagaraComponent* VFXComponent, UPrimaryDataAsset* NewWeaponData);
+	void SetUpComponent(USkeletalMeshComponent* MeshComponent, UNiagaraComponent* VFXComponent, UPrimaryDataAsset* NewWeaponData);
 
 	UFUNCTION(BlueprintCallable)
 	void ShootByTracing();
@@ -51,7 +51,7 @@ public:
 
 public:
 	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
-	TObjectPtr<UStaticMeshComponent> WeaponMeshComponent;
+	TObjectPtr<USkeletalMeshComponent> WeaponMeshComponent;
 
 	UPROPERTY(BlueprintReadWrite, Category = "Weapon")
 	TObjectPtr<UNiagaraComponent> MuzzleFlashComponent;
