@@ -21,8 +21,15 @@ protected:
 
 public:
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TObjectPtr<UStaticMeshComponent> EquippableMeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USkeletalMeshComponent> RootMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USkeletalMeshComponent> EquippableSkeletalMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<USceneComponent> Root;
 
 	UPROPERTY(BlueprintReadWrite)
 	TObjectPtr<UNiagaraComponent> VFXComponent;
