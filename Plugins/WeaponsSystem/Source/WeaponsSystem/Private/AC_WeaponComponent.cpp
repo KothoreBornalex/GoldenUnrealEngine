@@ -45,7 +45,7 @@ void UAC_WeaponComponent::BeginPlay()
 
 
 
-void UAC_WeaponComponent::SetUpComponent(UStaticMeshComponent* MeshComponent, UNiagaraComponent* VFXComponent, UPrimaryDataAsset* NewWeaponData)
+void UAC_WeaponComponent::SetUpComponent(USkeletalMeshComponent* MeshComponent, UNiagaraComponent* VFXComponent, UPrimaryDataAsset* NewWeaponData)
 {
 	
 	WeaponMeshComponent = MeshComponent;
