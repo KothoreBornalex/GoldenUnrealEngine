@@ -14,10 +14,10 @@ AEquippableActorClass::AEquippableActorClass()
     NetUpdateFrequency = 100.0f;
 
     ArrowComponent = CreateDefaultSubobject<UArrowComponent>("ArrowComponent");
-    EquippableMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>("EquippableMeshComponent");
-    EquippableMeshComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 
-    RootComponent = EquippableMeshComponent;
+    EquippableSkeletalMesh = CreateDefaultSubobject<USkeletalMeshComponent>("Equippable Mesh");
+    EquippableSkeletalMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    RootComponent = EquippableSkeletalMesh;
 
     VFXComponent = CreateDefaultSubobject<UNiagaraComponent>("VFXComponent");
     MuzzleActorComponent = CreateDefaultSubobject<UChildActorComponent>("MuzzleActorComponent");
