@@ -58,4 +58,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|Camera")
 	float CoyoteTime = 0.35f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ESP|Item|Equippable|ShortRangeAtack")
+	float ShortRangeAttack_Cooldown = 3.0f;
 };
